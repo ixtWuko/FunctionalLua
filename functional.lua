@@ -1,6 +1,8 @@
 -- functional by ixtWuko
 -- functional programming in Lua
 
+require("extend")
+
 local tinsert = table.insert
 
 local fp = {}
@@ -86,17 +88,11 @@ local removeTail = function(list)
 end
 
 local prepend = function(source, target)
-    for i, v in ipairs(source) do
-        tinsert(target, i, v)
-    end
-    return target
+    return table.prepend(target, source)
 end
 
 local append = function(source, target)
-    for _, v in ipairs(source) do
-        tinsert(target, v)
-    end
-    return target
+    return table.append(target, source)
 end
 
 local sort = function(comp, list)
@@ -105,11 +101,7 @@ local sort = function(comp, list)
 end
 
 local map = function(f, t)
-    local ret = {}
-    for k, v in pairs(t) do
-        ret[k] = f(v)
-    end
-    return ret
+    return table.map(t, f)
 end
 
 local concat = function(sep, list)
@@ -177,23 +169,7 @@ local gsub = function(pattern, repl, n, s)
 end
 
 local split = function(delimiter, s)
-    if s == nil or delimiter == nil then return nil end
-
-    local ret = {}
-    local from  = 1
-    local strFind = string.find
-    local strSub = string.sub
-
-    local delimiterFrom, delimiterTo = strFind(s, delimiter, from)
-    while delimiterFrom do
-        table.insert(ret, strSub(s, from, delimiterFrom - 1))
-        from  = delimiterTo + 1
-        delimiterFrom, delimiterTo = strFind(s, delimiter, from)
-    end
-
-    table.insert(ret, strSub(s, from))
-
-    return ret
+    return string.split(s, delimiter)
 end
 
 fp.s = {}
