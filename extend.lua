@@ -27,6 +27,43 @@ function table.append(target, source)
     return target
 end
 
+function table.copy(t)
+    local ret = {}
+    for k, v in pairs(t) do
+        ret[k] = v
+    end
+end
+
+local function deepcopy(t, mem)
+    if type(t) ~= "table" then
+        return t
+    end
+    if mem[t] then
+        return mem[t]
+    end
+
+    local copy = {}
+    mem[t] = copy
+    for k, v in pairs(t) do
+        copy[deepcopy(k, mem)] = deepcopy(v, mem)
+    end
+    setmetatable(copy, deepcopy(getmetatable(t), mem))
+    return copy
+end
+
+function table.deepcopy(t)
+    local mem = {}
+    return deepcopy(t, mem)
+end
+
+function table.tomap(list)
+    local ret = {}
+    for _, v in ipairs(list) do
+        ret[v] = true
+    end
+    return ret    
+end
+
 function table.map(t, f)
     local ret = {}
     for k, v in pairs(t) do
