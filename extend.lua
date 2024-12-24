@@ -47,7 +47,8 @@ local function deepcopy(t, mem)
     for k, v in pairs(t) do
         copy[deepcopy(k, mem)] = deepcopy(v, mem)
     end
-    setmetatable(copy, deepcopy(getmetatable(t), mem))
+    -- setmetatable(copy, deepcopy(getmetatable(t), mem))
+    setmetatable(copy, getmetatable(t))
     return copy
 end
 
@@ -61,7 +62,13 @@ function table.tomap(list)
     for _, v in ipairs(list) do
         ret[v] = true
     end
-    return ret    
+    return ret
+end
+
+function table.clear(t)
+    for k in pairs(t) do
+        t[k] = nil
+    end
 end
 
 function table.map(t, f)
