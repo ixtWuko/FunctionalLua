@@ -95,13 +95,37 @@ local append = function(source, target)
     return table.append(target, source)
 end
 
+local find = function(value, t)
+    return table.find(t, value)
+end
+
+local findif = function(condition, t)
+    return table.findif(t, condition)
+end
+
 local sort = function(comp, list)
     table.sort(list, comp)
     return list
 end
 
+local foreach = function(f, t)
+    return table.foreach(t, f)
+end
+
 local map = function(f, t)
     return table.map(t, f)
+end
+
+local filter = function(f, t)
+    return table.filter(t, f)
+end
+
+local reduce = function(f, init, list)
+    return table.reduce(list, f, init)
+end
+
+local zip = function(f, lhs, rhs)
+    return table.zip(lhs, rhs, f)
 end
 
 local concat = function(sep, list)
@@ -134,11 +158,29 @@ fp.t.Prepend = fp.Curry(prepend, 2)
 ---@type fun(source:table, target:table) : table
 fp.t.Append = fp.Curry(append, 2)
 
+---@type fun(value:any, t:table)
+fp.t.Find = fp.Curry(find, 2)
+
+---@type fun(condition:(fun(key:any, value:any):boolean), t:table)
+fp.t.If = fp.Curry(findif, 2)
+
 ---@type fun(comp:(fun(a:any, b:any):boolean), list:table) : table
 fp.t.Sort = fp.Curry(sort, 2)
 
----@type fun(f:(fun(a:any):any), t:table) : table
+---@type fun(f:(fun(v:any):any), t:table)
+fp.t.Foreach = fp.Curry(foreach, 2)
+
+---@type fun(f:(fun(v:any):any), t:table) : table
 fp.t.Map = fp.Curry(map, 2)
+
+---@type fun(f:(fun(v:any):boolean), t:table) : table
+fp.t.Filter = fp.Curry(filter, 2)
+
+---@type fun(f:(fun(a:any, b:any):any), init:any, list:table) : any
+fp.t.Reduce = fp.Curry(reduce, 3)
+
+---@type fun(f:(fun(a:any, b:any):any), lhs:table, rhs:table)
+fp.t.Zip = fp.Curry(zip, 3)
 
 ---@type fun(sep:string, list:table) : string
 fp.t.Concat = fp.Curry(concat, 2)
